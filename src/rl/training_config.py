@@ -7,7 +7,7 @@ from rl.rewards import RewardsABC
 
 @dataclass(kw_only=True)
 class TrainingConfig:
-    baseline: BaselineABC = NoneBaseline
+    baseline: BaselineABC = NoneBaseline()
     advantage_normalizer: Callable | None = None
     sequence_normalizer: Callable | None = None
     sampling_temperature: float

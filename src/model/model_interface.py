@@ -34,8 +34,7 @@ class ModelInterface:
     def generate_rollouts(self, 
                           prompts: list[str], 
                           max_rollout_tokens: int, 
-                          sampling_temperature: float,
-                          sampling_group_size: int,
+                          sampling_temperature: float
                           ) -> list[str]:
         input_batch = self.tokenize_prompts(prompts)
         output_batch = self._model.generate(input_ids = input_batch['input_ids'],
@@ -43,7 +42,6 @@ class ModelInterface:
                                 max_new_tokens = max_rollout_tokens,
                                 do_sample = True,
                                 temperature = sampling_temperature,
-                                num_return_sequences = sampling_group_size,
                                 )
         rollout_batch = self._tokenizer.batch_decode(output_batch, skip_special_tokens=True)
         return rollout_batch
