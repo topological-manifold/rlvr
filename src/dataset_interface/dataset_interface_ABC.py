@@ -1,13 +1,15 @@
 import numpy as np
 from typing import Any
 from abc import ABC, abstractmethod
-from datasets import load_from_disk
 
 class DatasetInterfaceABC:
-    def __init__(self, local_dataset_path: str, seed: int):
-        self.dataset = load_from_disk(local_dataset_path)
+    def __init__(self, seed: int):
         self.rng = np.random.default_rng(seed=seed)
 
+    @abstractmethod
+    def load_dataset(self, dataset_path: str):
+        pass
+    
     @abstractmethod
     def get_train(self) -> dict[str, list]:
         '''
