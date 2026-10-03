@@ -8,5 +8,5 @@ class BinaryRewards(RewardsABC):
 
     def __call__(self, responses: list[str], answers: list) -> torch.Tensor:
         rewards = torch.tensor([self.rollout_answer_extractor(response) == answer\
-                                    for response, answer in zip(responses, answers)])
+                                    for response, answer in zip(responses, answers)], dtype=torch.float)
         return rewards
