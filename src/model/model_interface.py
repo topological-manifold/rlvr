@@ -25,20 +25,26 @@ class ModelInterface:
 
     def tokenize_prompts(self, prompts: list[str]) -> dict[str, torch.Tensor]:
         return self._tokenizer(prompts, padding = True, padding_side = 'left', return_tensors='pt').to(self.device)
-
-    def generate_batch_inference(self, input_batch: dict[str, torch.Tensor], max_new_tokens = DEFAULT_MAX_NEW_TOKENS) -> torch.Tensor:
-        return self._model.generate(input_ids = input_batch['input_ids'],
-               attention_mask = input_batch['attention_mask'],
-               max_new_tokens = max_new_tokens)
-
+    
     def decode_prompt(self, prompts: str|list[str]):
         if isinstance(prompts, str):
             prompts = [prompts]
         return self._tokenizer.batch_decode(prompts, skip_special_tokens=True)
 
-    def generate_rollouts(self, prompts: list[str], max_new_tokens = DEFAULT_MAX_NEW_TOKENS) -> list[str]:
+    def generate_rollouts(self, 
+                          prompts: list[str], 
+                          max_rollout_tokens: int, 
+                          sampling_temperature: float,
+                          sampling_group_size: int,
+                          ) -> list[str]:
         input_batch = self.tokenize_prompts(prompts)
-        output_batch = self.generate_batch_inference(input_batch, max_new_tokens)
+        output_batch = self._model.generate(input_ids = input_batch['input_ids'],
+                                attention_mask = input_batch['attention_mask'],
+                                max_new_tokens = max_rollout_tokens,
+                                do_sample = True,
+                                temperature = sampling_temperature,
+                                num_return_sequences = sampling_group_size,
+                                )
         rollout_batch = self._tokenizer.batch_decode(output_batch, skip_special_tokens=True)
         return rollout_batch
 
