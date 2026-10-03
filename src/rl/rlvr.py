@@ -23,13 +23,13 @@ class RLVR:
         answers: list
     ):
         # suppose prompts.shape = (batch_size, common_prompt_len)
-        repeated_prompts = prompts*self.training_config.sampling_group_size
+        repeated_prompts, repeated_answers = prompts*self.training_config.sampling_group_size, answers*self.training_config.sampling_group_size
         rollouts: list[str] = self.model_interface.generate_rollouts(repeated_prompts, 
                                                                      self.training_config.max_rollout_tokens,
                                                                      self.training_config.sampling_temperature,
                                                                      ) # (batch_size, common_prompt_len+L)
         token_log_probs, response_mask = self.model_interface.get_token_level_log_probs(repeated_prompts, rollouts) # (batch_size, L)
-        rewards: torch.Tensor = self.training_config.reward_function(rollouts, answers)
+        rewards: torch.Tensor = self.training_config.reward_function(rollouts, repeated_answers)
         loss = self.compute_loss(rewards, token_log_probs, response_mask)
         self.model_interface.clear_gradients()
         loss.backward()

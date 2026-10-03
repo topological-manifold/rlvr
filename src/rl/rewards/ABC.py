@@ -8,4 +8,6 @@ class RewardsABC(ABC):
 
     @abstractmethod
     def __call__(self, responses: list[str], answers: list) -> torch.Tensor:
-        pass
+        if len(responses)!=len(answers):
+            raise ValueError(f"responses is a list of size {len(responses)}\
+                             which is not equal to size of answers label {len(answers)}.")
