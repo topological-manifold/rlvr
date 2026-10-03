@@ -42,7 +42,7 @@ class ModelInterface:
                                 attention_mask = input_batch['attention_mask'],
                                 max_new_tokens = max_rollout_tokens,
                                 do_sample = True,
-                                stop_strings=,
+                                stop_strings=stop_strings,
                                 tokenizer = self._tokenizer,
                                 temperature = sampling_temperature,
                                 )
