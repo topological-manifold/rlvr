@@ -9,4 +9,5 @@ class TrainingConfig:
     baseline: BaselineABC
     advantage_normalizer: Callable | None = None
     sequence_normalizer: Callable | None = None
+    answer_extractor: Callable[[str,], Any]
     reward_function: Callable[[str, Any], torch.Tensor]
