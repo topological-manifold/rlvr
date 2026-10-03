@@ -10,7 +10,7 @@ class TrainingConfig:
     baseline: BaselineABC = NoneBaseline
     advantage_normalizer: Callable | None = None
     sequence_normalizer: Callable | None = None
-    answer_extractor: Callable[[str,], Any]
+    rollout_answer_extractor: Callable[[str,], Any]
     sampling_temperature: float
     sampling_group_size: int
     max_rollout_tokens: int
