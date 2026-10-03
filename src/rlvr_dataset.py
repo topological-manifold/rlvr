@@ -1,11 +1,12 @@
 import numpy as np
 
 class RLVRDataset:
-    def __init__(self, seed, prompts: list[str], answers: list):
-        self.prompts = prompts
+    def __init__(self, seed: int, preprompt: str, prompts: list[str], answers: list):
+        self._validate_prompts_and_answers(prompts, answers)
+        self.preprompt = preprompt
+        self.prompts = [f"{self.preprompt}{prompt}" for prompt in prompts]
         self.answers = answers
         self.rng = np.random.default_rng(seed)
-        self._validate_prompts_and_answers(prompts, answers)
     
     @property
     def n_examples(self):
