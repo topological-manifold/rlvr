@@ -5,7 +5,6 @@ from typing import Callable
 
 @dataclass(kw_only=True)
 class TrainingConfig:
-    # TODO: make a lib for baselines. Implement them.
     baseline: BaselineABC
     advantage_normalizer: Callable | None = None
     sequence_normalizer: Callable | None = None
