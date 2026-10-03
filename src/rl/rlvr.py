@@ -27,6 +27,7 @@ class RLVR:
         rollouts: list[str] = self.model_interface.generate_rollouts(repeated_prompts, 
                                                                      self.training_config.max_rollout_tokens,
                                                                      self.training_config.sampling_temperature,
+                                                                     stop_strings=self.training_config.stop_strings,
                                                                      ) # (batch_size, common_prompt_len+L)
         token_log_probs, response_mask = self.model_interface.get_token_level_log_probs(repeated_prompts, rollouts) # (batch_size, L)
         rewards: torch.Tensor = self.training_config.reward_function(rollouts, repeated_answers).to(self.model_interface.device)

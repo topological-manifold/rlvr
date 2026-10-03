@@ -14,3 +14,4 @@ class TrainingConfig:
     sampling_group_size: int
     max_rollout_tokens: int
     reward_function: RewardsABC
+    stop_strings: list[str]
