@@ -1,1 +1,1 @@
-Library to study RL in LLMs.
+Library to experiment with RLVR in LLMs.
