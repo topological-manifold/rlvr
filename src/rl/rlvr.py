@@ -14,8 +14,8 @@ class RLVR:
         '''
         B, G = rewards.shape
         response_log_probs = token_log_probabilities*response_mask
-        loss = rewards*(response_log_probs.sum(dim=2)).sum()
-        return loss/(B*G)
+        loss_per_batch: torch.Tensor = (rewards-self.training_config.baseline.get_batch_baseline(rewards))*(response_log_probs.sum(dim=2))
+        return loss_per_batch.sum()/(B*G)
 
     def train_one_step(
         self,
