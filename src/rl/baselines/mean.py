@@ -6,7 +6,7 @@ class MeanBaseline(BaselineABC):
         super().__init__()
     
     def __call__(self, rewards: torch.Tensor):
-        # rewards.shape = (BATCH_DIM,)
+        # rewards.shape = (BATCH_DIM, SAMPLES_PER_BATCH)
         if rewards.dim > 1:
             raise ValueError(f"Expected 1-dimensional rewards tensor, but it has dimension {rewards.dim}.")
-        return rewards.mean()
+        return rewards.mean(dim = 1, keepdim = True)
