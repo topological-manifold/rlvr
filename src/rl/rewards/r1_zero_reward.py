@@ -1,5 +1,5 @@
 import torch
-from typing import Callable, Any
+from typing import Any
 from rl.rewards.ABC import RewardsABC
 from rl.rewards._drpo_grader import r1_zero_reward_fn
 
