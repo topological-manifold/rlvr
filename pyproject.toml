@@ -13,6 +13,11 @@ dependencies = [
     "huggingface-hub>=1",
     "sentencepiece>=0.2.1",
     "protobuf>=6",
+    "sympy>=1.14.0",
+    "latex2sympy2-extended>=1.11.0",
+    "math-verify>=0.9.0",
+    "pylatexenc>=2.11",
+    "antlr4-python3-runtime==4.11.*",
 ]
 
 [build-system]

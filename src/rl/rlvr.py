@@ -1,4 +1,5 @@
 import torch
+from typing import Any
 from rl.training_config import TrainingConfig
 from model.model_interface import ModelInterface
 
@@ -21,7 +22,7 @@ class RLVR:
     def train_one_step(
         self,
         prompts: list[str],
-        answers: list
+        answers: list[Any]
     ):
         # suppose prompts.shape = (batch_size, common_prompt_len)
         repeated_prompts, repeated_answers = prompts*self.training_config.sampling_group_size, answers*self.training_config.sampling_group_size
@@ -31,9 +32,13 @@ class RLVR:
                                                                      self.training_config.sampling_temperature,
                                                                      stop_strings=self.training_config.stop_strings,
                                                                      ) # (batch_size * sampling_group_size, common_prompt_len+L)
+        
         token_log_probs, response_mask = self.model_interface.get_token_level_log_probs(repeated_prompts, rollouts) # (batch_size * sampling_group_size, L)
+
         with torch.no_grad():
-            rewards: torch.Tensor = self.training_config.reward_function(rollouts, repeated_answers).to(self.model_interface.device)
+            responses = [rollout[len(repeated_prompt):] for rollout, repeated_prompt in zip(rollouts, repeated_prompts)]
+            rewards: torch.Tensor = self.training_config.reward_function(responses, repeated_answers).to(self.model_interface.device)
+        
         loss = self.compute_loss(rewards, token_log_probs, response_mask)
         self.model_interface.clear_gradients()
         loss.backward()
